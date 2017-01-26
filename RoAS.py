@@ -1,5 +1,4 @@
-# IIIT-Bh, Rosei - Online Mess Management System.
-# RoAS - Rosei Automation System.
+# RoAS - IIIT-Bh Rosei Automation System.
 # Requires Selenium and Chrome Webdriver.
 # Copyright (c) 2017 Ravi Teja Gannavarapu.
 # Distributed under MIT License.
