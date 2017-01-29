@@ -1,6 +1,6 @@
-#IIIT-Bh Rosei Automation System (RoAS).
+#IIIT-Bh Rosei Automation Tool (RoAT).
 
-###Prerequisites for RoAS.
+###Prerequisites for RoAT.
 * Selenium
 * Chrome Webdriver (ChromeDriver)
 
