@@ -1,4 +1,4 @@
-# RoAS - Rosei Automation System.
+# RoAS - Rosei Automation Tool.
 # Requires Selenium and Chrome Webdriver.
 # Copyright (c) 2017 Ravi Teja Gannavarapu.
 # Distributed under MIT License.
