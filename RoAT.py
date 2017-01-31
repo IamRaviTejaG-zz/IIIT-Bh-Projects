@@ -2,6 +2,7 @@
 # Requires Selenium and Chrome Webdriver.
 # Copyright (c) 2017 Ravi Teja Gannavarapu.
 # Distributed under MIT License.
+# Updated on 01/02/2017.
 
 """
 Inspired from Hibiscus Automation by Ankit Choudhary (B216008) (b216008@iiit-bh.ac.in).
@@ -10,9 +11,9 @@ Contact Ravi Teja Gannavarapu (b216023@iiit-bh.ac.in) for further help/informati
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import os #For os.path.exists, 
+import os #For os.path.exists
 
-#Food codes data. Please note that these codes are no way related to the Roseighara platform and are useful only in this module itself.
+#Food codes data. These codes are not related to the Roseighara platform and are useful only in this module.
 titles = ["", "BRF", "LUN", "DIN"]
 mon1 = ["MON", "111", "112", "113"]
 tue1 = ["TUE", "121", "122", "123"]
@@ -113,16 +114,13 @@ def main():
 		c = raw_input("1. Register coupons for the upcoming week.\n2. Change preferences.\n3. View present preferences.\n4. View amount to be paid.\n5. Exit.\n\nEnter your choice: ")
 		if (int(c) == 1):
 			browser = webdriver.Chrome("chromedriver.exe") #Set the path to the chromedriver executable folder.
-			chromeOptions = webdriver.ChromeOptions()
-			prefs = {"profile.managed_default_content_settings.images":2} #Prevents images from loading.
-			chromeOptions.add_experimental_option("prefs", prefs) #Adds the 'prefs' in the above line to the chrome options.
 			browser.get("http://172.16.2.200:8081/rosei/login.jsp")
 			uname = browser.find_element_by_name('un')
 			pword = browser.find_element_by_name('pw')
 			uname.send_keys(username)
 			pword.send_keys(paword)
 			browser.find_element_by_name('submit').click()
-			q = cost(ufc1, ufc2)
+			q = cost()
 			for i in ufc:
 				if (i == ufc1 and len(i) != 0):
 					browser.get("http://172.16.2.200:8081/rosei/selectmess.jsp")
@@ -137,7 +135,6 @@ def main():
 							for i in range(1):
 								browser.find_element_by_id (d1[g]).click()
 					browser.find_element_by_id('submit').click()
-					browser.sleep(5000)
 					print ("Roseighara 1 Coupons Booked Successfully!")
 				if (i == ufc2 and len(i) != 0):
 					browser.get("http://172.16.2.200:8081/rosei/selectmess.jsp")
@@ -152,13 +149,13 @@ def main():
 							for i in range(1):
 								browser.find_element_by_id (d1[g]).click()
 					browser.find_element_by_id('submit').click()
-					browser.sleep(5000)
 					print ("Roseighara 2 Coupons Booked Successfully!")
 			print ("\nRoseighara 1 Amount: " + str(q[0]))
 			print ("\nRoseighara 2 Amount: " + str(q[1]))
 			print ("\nTotal Roseighara Amount: " + str(q[0] + q[1]))
 			
 		elif (int(c) == 2):
+			printf("Enter 
 			setprefs()
 			main()
 
