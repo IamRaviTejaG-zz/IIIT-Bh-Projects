@@ -155,7 +155,6 @@ def main():
 			print ("\nTotal Roseighara Amount: " + str(q[0] + q[1]))
 			
 		elif (int(c) == 2):
-			printf("Enter 
 			setprefs()
 			main()
 
