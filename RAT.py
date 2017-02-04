@@ -1,6 +1,6 @@
 # RAT - Rosei Automation Tool.
 # Requires Selenium and Chrome Webdriver.
-# Last Update: 03-02-2017.
+# Last Update: 04-02-2017.
 # Copyright (c) 2017 Ravi Teja Gannavarapu.
 # Distributed under MIT License.
 
@@ -11,7 +11,9 @@ Contact Ravi Teja Gannavarapu (b216023@iiit-bh.ac.in) for further help/informati
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import os #For os.path.exists
+import os
+
+# ^ For os.path.exists and os.system('cls')
 
 #Food codes data. Please note that these codes are no way related to the Roseighara platform and are useful only in this module itself.
 titles = ["", "BRF", "LUN", "DIN"]
@@ -39,7 +41,7 @@ d1 = {111:"mess1b1", 121:"mess1b2", 131:"mess1b3", 141:"mess1b4", 151:"mess1b5",
 
 #For printing the food codes.
 def fcodes():
-	print ("Roseighara-1 Food Codes\n")
+	print ("\nRoseighara-1 Food Codes\n")
 	for i in foodcodes1:
 		for j in i:
 			print j + "\t",
@@ -68,51 +70,44 @@ def booking():
 	uname.send_keys(username)
 	pword.send_keys(paword)
 	browser.find_element_by_name('submit').click()
+	for i in ufc:
+		browser.get("http://172.16.2.200:8081/rosei/selectmess.jsp")
+		if (len(i) != 0 and i == ufc1):
+			browser.find_element_by_xpath('//*[@id="p1"]').click()
+			for j in ufc1:
+				r = j[1:len(j)]
+				g = int(r)
+				xp = "//*[@id=\"" + d1[g] + "\"]"
+				if (j[0] == "V" or j[0] == "v"):
+					for i in range(2):
+						browser.find_element_by_xpath(xp).click()
+				elif (j[0] == "N" or j[0] == "n"):
+					for i in range(1):
+						browser.find_element_by_xpath(xp).click()
+			browser.find_element_by_xpath('//*[@id="submit"]').click()
+		if (len(i) != 0 and i == ufc2):
+			browser.find_element_by_id('//*[@id="p2"]').click()
+			for j in ufc2:
+				r = j[1:len(j)]
+				g = int(r) - 100 #The goddamn HTML selectors used the same ID.
+				xp = "//*[@id=\"" + d1[g] + "\"]"
+				if (j[0] == "V" or j[0] == "v"):
+					for i in range(2):
+						browser.find_element_by_xpath(xp).click()
+				elif (j[0] == "N" or j[0] == "n"):
+					for i in range(1):
+						browser.find_element_by_xpath(xp).click()
+			browser.find_element_by_xpath('//*[@id="submit"]').click()
 	q = cost()
-		if (len(i) != 0):
-			browser.get("http://172.16.2.200:8081/rosei/selectmess.jsp")
-			""" This part needs some edits before being fully functional. """
-			if (i == ufc1):
-				browser.find_element_by_xpath('//*[@id="p1"]').click()
-				for j in ufc1:
-					r = j[1:len(j)]
-					g = int(r)
-					if (j[0] == "V" or j[0] == "v"):
-						for i in range(2):
-							xp = "//*[@id=\"" + d1[g] + "\"]"
-							print xp
-							browser.find_element_by_xpath(xp).click()
-					elif (j[0] == "N" or j[0] == "n"):
-						for i in range(1):
-							xp = "//*[@id=\"" + d1[g] + "\"]"
-							print xp
-							browser.find_element_by_xpath(xp).click()
-				browser.find_element_by_xpath('//*[@id="submit"]').click()
-				print ("Roseighara 1 Coupons Booked Successfully!")
-				if (len(ufc2) != 0):
-				browser.find_element_by_id('//*[@id="p2"]').click()
-				for j in ufc2:
-					r = j[1:len(j)]
-					g = int(r) - 100 #The goddamn HTML selectors used the same ID.
-					if (j[0] == "V" or j[0] == "v"):
-						for i in range(2):
-							browser.find_element_by_id(d1[g]).click()
-					elif (j[0] == "N" or j[0] == "n"):
-						for i in range(1):
-							browser.find_element_by_id (d1[g]).click()
-				browser.find_element_by_id('submit').click()
-				print ("Roseighara 2 Coupons Booked Successfully!")
-			""" Here ends the part that needs some editing. Do not edit beyond this line. """
-	print ("\nRoseighara 1 Amount: " + str(q[0]))
-	print ("\nRoseighara 2 Amount: " + str(q[1]))
+	print ("\nBooking Complete.")
 	print ("\nTotal Roseighara Amount: " + str(q[0] + q[1]))
 
 #For changing the user preferences.
 def setprefs():
-	uname = raw_input("Enter your username: ")
+	uname = raw_input("\nEnter your username: ")
 	pwd = raw_input("\nEnter your password: ")
 	fcodes()
-	print ("NOTE: Please prefix your food code with V for Veg and N for Non-Veg.\n")
+	print ("\nNOTE: Please prefix your food code with V for Veg and N for Non-Veg.\n")
 	k = raw_input ("\nEnter your Roseighara 1 food codes in the correct format separated by space in a single line: ")
 	g = raw_input ("\nEnter your Roseighara 2 food codes in the correct format separated by space in a single line: ")
 	f = open("roseidata.dat", "w")
@@ -126,7 +121,6 @@ def setprefs():
 	f.write("\n")
 	f.close()
 	print ("\n\nPreferences updated!")
-	main()
 
 #For viewing the user preferences.
 def viewprefs():
@@ -140,13 +134,12 @@ def viewprefs():
 	ufc2 = a[3].split()
 	u = cost()
 	print ("\nUsername: " + username)
-	print ("Password: " + paword)
-	print ("Roseighara 1 Food Preferences: " + ''.join(ufc1))
-	print ("Roseighara 2 Food Preferences: " + ' '.join(ufc2))
-	print ("Roseighara 1 Amount: " + str(u[0]))
-	print ("Roseighara 2 Amount: " + str(u[1]))
-	print ("Total Roseighara Amount: " + str(u[0] + u[1]))
-	print ("\n\n")
+	print ("\nPassword: " + paword)
+	print ("\nRoseighara 1 Food Preferences: " + ''.join(ufc1))
+	print ("\nRoseighara 2 Food Preferences: " + ' '.join(ufc2))
+	print ("\nRoseighara 1 Amount: " + str(u[0]))
+	print ("\nRoseighara 2 Amount: " + str(u[1]))
+	print ("\nTotal Roseighara Amount: " + str(u[0] + u[1]))
 
 #For calculating the cost.
 def cost():
@@ -175,36 +168,36 @@ def cost():
 #The main function. Calls every other function.
 def main():
 	if (os.path.exists("roseidata.dat") == False):
-		print ("Preferences/Data file wasn't found. Please set preferences.\n")
+		print ("\nPreferences/Data file wasn't found. Please set preferences.")
 		setprefs()
+		main()
 	else:
-		print ("Preferences file was found. Reading from file.\n")
-		c = raw_input("1. Register coupons for the upcoming week.\n2. Change preferences.\n3. View present preferences.\n4. View amount to be paid.\n5. Exit.\n\nEnter your choice: ")
+		print ("\nPreferences file was found. Reading from file.")
+		c = raw_input("\n1. Register coupons for the upcoming week.\n2. Change preferences.\n3. View present preferences.\n4. View amount to be paid.\n5. Exit.\n\nEnter your choice: ")
 		if (int(c) == 1):
+			os.system('cls')
 			booking()
 			main()
-
 		elif (int(c) == 2):
+                        os.system('cls')
 			setprefs()
 			main()
-
 		elif (int(c) == 3):
+                        os.system('cls')
 			viewprefs()
 			main()
-
 		elif (int(c) == 4):
+                        os.system('cls')
 			u = cost()
-			print ("Roseighara 1 Amount: " + str(u[0]))
-			print ("Roseighara 2 Amount: " + str(u[1]))
-			print ("Total Roseighara Amount: " + str(u[0] + u[1]))
+			print ("\nRoseighara 1 Amount: " + str(u[0]))
+			print ("\nRoseighara 2 Amount: " + str(u[1]))
+			print ("\nTotal Roseighara Amount: " + str(u[0] + u[1]))
 			main()
-
 		elif (int(c) == 5):
 			exit()
-
 		else:
 			main()
 
 #And finally the main function call.
-print ("Welcome to Rosei Automation Tool\n")
+print ("Welcome to Rosei Automation Tool")
 main()
