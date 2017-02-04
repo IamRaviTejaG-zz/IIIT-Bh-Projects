@@ -1,4 +1,5 @@
-#IIIT-Bh Rosei Automation Tool (RoAT).
+#IIIT-Bh Rosei Automation Tool (RAT).
+######Last Updated on 03 Feb 2017.
 
 ###Prerequisites for RoAT.
 * Selenium
