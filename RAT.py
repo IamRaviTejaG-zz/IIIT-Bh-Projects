@@ -1,6 +1,6 @@
 # RAT - Rosei Automation Tool.
 # Requires Selenium and Chrome Webdriver.
-# Last Update: 04-02-2017.
+# Last Update: 14-03-2017.
 # Copyright (c) 2017 Ravi Teja Gannavarapu.
 # Distributed under MIT License.
 
@@ -11,11 +11,10 @@ Contact Ravi Teja Gannavarapu (b216023@iiit-bh.ac.in) for further help/informati
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import os
+from time import sleep
+import os # For os.path.exists, system('cls')
 
-# ^ For os.path.exists and os.system('cls')
-
-#Food codes data. Please note that these codes are no way related to the Roseighara platform and are useful only in this module itself.
+# Food codes. Please note that these codes are not related to the Roseighara platform and are useful only for this module itself.
 titles = ["", "BRF", "LUN", "DIN"]
 mon1 = ["MON", "111", "112", "113"]
 tue1 = ["TUE", "121", "122", "123"]
@@ -34,12 +33,12 @@ sun2 = ["SUN", "271", "272", "273"]
 foodcodes1 = [titles, mon1, tue1, wed1, thu1, fri1, sat1, sun1]
 foodcodes2 = [titles, mon2, tue2, wed2, thu2, fri2, sat2, sun2]
 
-#The dictionary below (d1) is Roseighara HTML ID's for use with the selenium webdriver.
+# The dictionary d1 is Roseighara's HTML ID's for use with the selenium webdriver.
 d1 = {111:"mess1b1", 121:"mess1b2", 131:"mess1b3", 141:"mess1b4", 151:"mess1b5", 161:"mess1b6", 171:"mess1b7"\
 	,112:"mess1l1", 122:"mess1l2", 132:"mess1l3", 142:"mess1l4", 152:"mess1l5", 162:"mess1l6", 172:"mess1l7"\
 	,113:"mess1d1", 123:"mess1d2", 133:"mess1d3", 143:"mess1d4", 153:"mess1d5", 163:"mess1d6", 173:"mess1d7"}
 
-#For printing the food codes.
+# For printing the food codes.
 def fcodes():
 	print ("\nRoseighara-1 Food Codes\n")
 	for i in foodcodes1:
@@ -52,44 +51,44 @@ def fcodes():
 			print j + "\t",
 		print "\n"
 
-#For booking the coupons.
+# For booking the coupons.
 def booking():
 	with open("roseidata.dat", "r") as f:
-		a = f.readlines() #Reads from the files and stores each line as list item.
-	a = [x.strip() for x in a] #Removes any whitespace characters from the list.
+		a = f.readlines() # Reads from the files and stores each line as list item.
+	a = [x.strip() for x in a] # Removes any whitespace characters from the list.
 	f.close()
 	username = a[0]
 	paword = a[1]
 	ufc1 = a[2].split()
 	ufc2 = a[3].split()
-	ufc = [ufc1, ufc2]
-	browser = webdriver.Chrome("chromedriver.exe") #Set the path to the chromedriver executable folder.
+	browser = webdriver.Chrome("chromedriver.exe") # Set the path to the chromedriver executable folder.
 	browser.get("http://172.16.2.200:8081/rosei/login.jsp")
 	uname = browser.find_element_by_name('un')
 	pword = browser.find_element_by_name('pw')
 	uname.send_keys(username)
 	pword.send_keys(paword)
 	browser.find_element_by_name('submit').click()
-	for i in ufc:
+	if (len(ufc1) != 0):
 		browser.get("http://172.16.2.200:8081/rosei/selectmess.jsp")
-		if (len(i) != 0 and i == ufc1):
-			browser.find_element_by_xpath('//*[@id="p1"]').click()
-			for j in ufc1:
-				r = j[1:len(j)]
-				g = int(r)
-				xp = "//*[@id=\"" + d1[g] + "\"]"
-				if (j[0] == "V" or j[0] == "v"):
-					for i in range(2):
-						browser.find_element_by_xpath(xp).click()
-				elif (j[0] == "N" or j[0] == "n"):
-					for i in range(1):
-						browser.find_element_by_xpath(xp).click()
-			browser.find_element_by_xpath('//*[@id="submit"]').click()
-		if (len(i) != 0 and i == ufc2):
-			browser.find_element_by_id('//*[@id="p2"]').click()
+		browser.find_element_by_xpath('//*[@id="p1"]').click()
+		for j in ufc1:
+			r = j[1:len(j)]
+			g = int(r)
+			xp = "//*[@id=\"" + d1[g] + "\"]"
+			if (j[0] == "V" or j[0] == "v"):
+				for i in range(2):
+					browser.find_element_by_xpath(xp).click()
+			elif (j[0] == "N" or j[0] == "n"):
+				for i in range(1):
+					browser.find_element_by_xpath(xp).click()
+		browser.find_element_by_xpath('//*[@id="submit"]').click()
+		sleep(2)
+		if (len(ufc2) !=0):
+			browser.get("http://172.16.2.200:8081/rosei/selectmess.jsp")
+			browser.find_element_by_xpath('//*[@id="p2"]').click()
 			for j in ufc2:
 				r = j[1:len(j)]
-				g = int(r) - 100 #The goddamn HTML selectors used the same ID.
+				g = int(r) - 100 # The R1 and R2 HTML codes use the same IDs.
 				xp = "//*[@id=\"" + d1[g] + "\"]"
 				if (j[0] == "V" or j[0] == "v"):
 					for i in range(2):
@@ -98,11 +97,34 @@ def booking():
 					for i in range(1):
 						browser.find_element_by_xpath(xp).click()
 			browser.find_element_by_xpath('//*[@id="submit"]').click()
+			sleep(2)
+			browser.close()
+	elif (len(ufc1) == 0 and len(ufc2) != 0):
+		browser.get("http://172.16.2.200:8081/rosei/selectmess.jsp")
+		browser.find_element_by_xpath('//*[@id="p2"]').click()
+		for j in ufc2:
+			r = j[1:len(j)]
+			g = int(r) - 100 # The R1 and R2 HTML codes use the same IDs.
+			xp = "//*[@id=\"" + d1[g] + "\"]"
+			if (j[0] == "V" or j[0] == "v"):
+				for i in range(2):
+					browser.find_element_by_xpath(xp).click()
+			elif (j[0] == "N" or j[0] == "n"):
+				for i in range(1):
+					browser.find_element_by_xpath(xp).click()
+		browser.find_element_by_xpath('//*[@id="submit"]').click()
+		sleep(3)
+		browser.close()
 	q = cost()
-	print ("\nBooking Complete.")
-	print ("\nTotal Roseighara Amount: " + str(q[0] + q[1]))
+	print ("\nBOOKING COMPLETE!")
+	print ("\nTotal Amount: " + str(q[0] + q[1]))
+	print ("\n\nThank you for using RAT! Exiting in 5 seconds!")
+	for i in range(5):
+		sleep(1)
+		print (5-i)
+	exit()
 
-#For changing the user preferences.
+# For changing the user preferences.
 def setprefs():
 	uname = raw_input("\nEnter your username: ")
 	pwd = raw_input("\nEnter your password: ")
@@ -120,13 +142,13 @@ def setprefs():
 	f.write(g)
 	f.write("\n")
 	f.close()
-	print ("\n\nPreferences updated!")
+	print ("\n\nPREFERENCES UPDATED!")
 
-#For viewing the user preferences.
+# For viewing the user preferences.
 def viewprefs():
 	with open("roseidata.dat", "r") as f:
-		a = f.readlines() #Reads from the files and stores each line as list item.
-	a = [x.strip() for x in a] #Removes any whitespace characters from the list.
+		a = f.readlines() # Reads from the files and stores each line as list item.
+	a = [x.strip() for x in a]# Removes any whitespace characters from the list.
 	f.close()
 	username = a[0]
 	paword = a[1]
@@ -135,17 +157,17 @@ def viewprefs():
 	u = cost()
 	print ("\nUsername: " + username)
 	print ("\nPassword: " + paword)
-	print ("\nRoseighara 1 Food Preferences: " + ''.join(ufc1))
+	print ("\nRoseighara 1 Food Preferences: " + ' '.join(ufc1))
 	print ("\nRoseighara 2 Food Preferences: " + ' '.join(ufc2))
 	print ("\nRoseighara 1 Amount: " + str(u[0]))
 	print ("\nRoseighara 2 Amount: " + str(u[1]))
 	print ("\nTotal Roseighara Amount: " + str(u[0] + u[1]))
 
-#For calculating the cost.
+# For calculating the cost.
 def cost():
 	with open("roseidata.dat", "r") as f:
-		b = f.readlines() #Reads from the files and stores each line as list item.
-	b = [x.strip() for x in b] #Removes any whitespace characters from the list.
+		b = f.readlines() # Reads from the files and stores each line as list item.
+	b = [x.strip() for x in b] # Removes any whitespace characters from the list.
 	f.close()
 	a = []
 	count1 = count2 = 0
@@ -165,29 +187,29 @@ def cost():
 	a.append(count2)
 	return a
 
-#The main function. Calls every other function.
+# The main function. Calls every other function.
 def main():
 	if (os.path.exists("roseidata.dat") == False):
-		print ("\nPreferences/Data file wasn't found. Please set preferences.")
+		print ("\nPREFERENCES FILE NOT FOUND! PLEASE SET PREFERENCES AGAIN!")
 		setprefs()
 		main()
 	else:
-		print ("\nPreferences file was found. Reading from file.")
+		print ("\nPREFERENCES FILE FOUND! READING FROM FILE!")
 		c = raw_input("\n1. Register coupons for the upcoming week.\n2. Change preferences.\n3. View present preferences.\n4. View amount to be paid.\n5. Exit.\n\nEnter your choice: ")
 		if (int(c) == 1):
 			os.system('cls')
 			booking()
 			main()
 		elif (int(c) == 2):
-                        os.system('cls')
+			os.system('cls')
 			setprefs()
 			main()
 		elif (int(c) == 3):
-                        os.system('cls')
+			os.system('cls')
 			viewprefs()
 			main()
 		elif (int(c) == 4):
-                        os.system('cls')
+			os.system('cls')
 			u = cost()
 			print ("\nRoseighara 1 Amount: " + str(u[0]))
 			print ("\nRoseighara 2 Amount: " + str(u[1]))
@@ -198,6 +220,6 @@ def main():
 		else:
 			main()
 
-#And finally the main function call.
-print ("Welcome to Rosei Automation Tool")
+# The main function call.
+print ("ROSEI AUTOMATION TOOL")
 main()
