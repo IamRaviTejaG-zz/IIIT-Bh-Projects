@@ -1,7 +1,7 @@
 # IIIT-Bh Rosei Automation Tool (RAT).
 ###### Last Updated on 04 Feb 2017.
 
-### Prerequisites for RoAT.
+### Prerequisites for RAT.
 * Selenium
 * Chrome Webdriver (ChromeDriver)
 
