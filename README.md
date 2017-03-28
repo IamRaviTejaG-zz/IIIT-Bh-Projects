@@ -27,9 +27,10 @@ The preferences file can either be a text file (.txt) or a binary file (.dat). T
 `BX16XXX`<br />
 `passwordgoeshere`<br />
 `V112 V113 V122 V123`<br />
-`V232 V233 V242 V243`<br />
+`V232 V233 V242 V243`<br /><br />
 
 **NOTE: If the user doesn't want to book coupons in any of the Roseigharas, then the corresponsing line may be left blank (line 3 can be left blank for no coupons from Roseighara 1 and line 4 can be left blank for no coupons from Roseighara 2).**
+***
 
-##### Distributed under MIT License.
-##### Copyright © 2017 Ravi Teja Gannavarapu.
+#### Distributed under MIT License.
+#### Copyright © 2017 Ravi Teja Gannavarapu.
