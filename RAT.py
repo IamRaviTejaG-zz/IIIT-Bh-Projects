@@ -1,6 +1,6 @@
 # RAT - Rosei Automation Tool.
 # Requires Selenium and Chrome Webdriver.
-# Last Update: 14-03-2017.
+# Last Update: 28-03-2017.
 # Copyright (c) 2017 Ravi Teja Gannavarapu.
 # Distributed under MIT License.
 
@@ -44,12 +44,12 @@ def fcodes():
 	for i in foodcodes1:
 		for j in i:
 			print j + "\t",
-		print "\n"
+		print ("\n")
 	print ("\nRoseighara-2 Food Codes\n")
 	for i in foodcodes2:
 		for j in i:
 			print j + "\t",
-		print "\n"
+		print ("\n")
 
 # For booking the coupons.
 def booking():
@@ -115,6 +115,7 @@ def booking():
 		browser.find_element_by_xpath('//*[@id="submit"]').click()
 		sleep(3)
 		browser.close()
+	browser.quit()
 	q = cost()
 	print ("\nBOOKING COMPLETE!")
 	print ("\nTotal Amount: " + str(q[0] + q[1]))
