@@ -1,9 +1,9 @@
 from Tkinter import *
+from tkFileDialog import askopenfile
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from time import sleep
 import os
-import tkFileDialog
 
 g = Tk()
 g.title("Rosei Automation Tool")
@@ -32,7 +32,7 @@ d1 = {111:"mess1b1", 121:"mess1b2", 131:"mess1b3", 141:"mess1b4", 151:"mess1b5",
 fpath = []
 
 def preffileopen():
-	file1 = tkFileDialog.askopenfile()
+	file1 = askopenfile()
 	a = file1.name
 	b = a.split("/")
 	fpath.append(b[len(b)-1])
@@ -129,8 +129,8 @@ def booking():
 	q = cost()
 	r = sum(q)
 	s = "Total Cost: Rs. " + str(r)
-	binLabel = Label(text="Booking Complete!", font=('Raleway', 14, 'bold')).grid(row=2, sticky="w")
 	costLabel = Label(text=s, font=('Arial', 12)).grid(row=3, sticky="w")
+	binLabel = Label(text="Booking Complete!", font=('Arial', 14, 'bold')).grid(row=2, sticky="w")
 
 f = Button(text = "Select Preferences File", command = preffileopen).grid(row=0, column=0, sticky="w")
 spacing = Label(text="                                   ").grid(row=0, column=1)
