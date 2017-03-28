@@ -3,10 +3,10 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from time import sleep
 import os
+import tkFileDialog
 
 g = Tk()
 g.title("Rosei Automation Tool")
-g.geometry("300x75")
 
 titles = ["", "BRF", "LUN", "DIN"]
 mon1 = ["MON", "111", "112", "113"]
@@ -28,10 +28,41 @@ foodcodes2 = [titles, mon2, tue2, wed2, thu2, fri2, sat2, sun2]
 d1 = {111:"mess1b1", 121:"mess1b2", 131:"mess1b3", 141:"mess1b4", 151:"mess1b5", 161:"mess1b6", 171:"mess1b7"\
 	,112:"mess1l1", 122:"mess1l2", 132:"mess1l3", 142:"mess1l4", 152:"mess1l5", 162:"mess1l6", 172:"mess1l7"\
 	,113:"mess1d1", 123:"mess1d2", 133:"mess1d3", 143:"mess1d4", 153:"mess1d5", 163:"mess1d6", 173:"mess1d7"}
+fpath = []
+
+def preffileopen():
+	file1 = tkFileDialog.askopenfile()
+	a = file1.name
+	b = a.split("/")
+	fpath.append(b[len(b)-1])
+	c = "Preferences File: " + fpath[0]
+	label = Label(text=c, font=('Arial', 10)).grid(row=1, sticky="w")
+
+def cost():
+	with open(fpath[0], "r") as f:
+		b = f.readlines()
+	b = [x.strip() for x in b]
+	f.close()
+	a = []
+	count1 = count2 = 0
+	uc1 = b[2].split()
+	uc2 = b[3].split()
+	for i in uc1:
+		if (i[3] == '1'):
+			count1+=10
+		elif (i[3] == '2' or i[3] == '3'):
+			count1+=25
+	for j in uc2:
+		if (j[3] == '1'):
+			count2+=10
+		elif (j[3] == '2' or j[3] == '3'):
+			count2+=25
+	a.append(count1)
+	a.append(count2)
+	return a
 
 def booking():
-        workingLabel = Label(text="Working!").pack()
-	with open("roseidata.dat", "r") as f:
+	with open(fpath[0], "r") as f:
 		a = f.readlines()
 	a = [x.strip() for x in a]
 	f.close()
@@ -91,10 +122,16 @@ def booking():
 				for i in range(1):
 					browser.find_element_by_xpath(xp).click()
 		browser.find_element_by_xpath('//*[@id="submit"]').click()
-		sleep(3)
+		sleep(2)
 		browser.close()
-	binLabel = Label(text="Booking Complete!").pack()
+	q = cost()
+	r = sum(q)
+	s = "Total Cost: Rs. " + str(r)
+	binLabel = Label(text="Booking Complete!", font=('Raleway', 14, 'bold')).grid(row=2, sticky="w")
+	costLabel = Label(text=s, font=('Arial', 12)).grid(row=3, sticky="w")
 
-submit = Button(text="Register Coupons", command = booking).pack()
+f = Button(text = "Select Preferences File", command = preffileopen).grid(row=0, column=0, sticky="w")
+spacing = Label(text="                                   ").grid(row=0, column=1)
+reg = Button(text = "Register Coupons", command = booking).grid(row=0, column=2)
 
 g.mainloop()
