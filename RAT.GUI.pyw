@@ -28,6 +28,7 @@ foodcodes2 = [titles, mon2, tue2, wed2, thu2, fri2, sat2, sun2]
 d1 = {111:"mess1b1", 121:"mess1b2", 131:"mess1b3", 141:"mess1b4", 151:"mess1b5", 161:"mess1b6", 171:"mess1b7"\
 	,112:"mess1l1", 122:"mess1l2", 132:"mess1l3", 142:"mess1l4", 152:"mess1l5", 162:"mess1l6", 172:"mess1l7"\
 	,113:"mess1d1", 123:"mess1d2", 133:"mess1d3", 143:"mess1d4", 153:"mess1d5", 163:"mess1d6", 173:"mess1d7"}
+
 fpath = []
 
 def preffileopen():
@@ -124,6 +125,7 @@ def booking():
 		browser.find_element_by_xpath('//*[@id="submit"]').click()
 		sleep(2)
 		browser.close()
+	browser.quit()
 	q = cost()
 	r = sum(q)
 	s = "Total Cost: Rs. " + str(r)
