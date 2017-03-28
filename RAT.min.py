@@ -96,6 +96,7 @@ def booking():
 		browser.find_element_by_xpath('//*[@id="submit"]').click()
 		sleep(3)
 		browser.close()
+	browser.quit()
 	q = cost()
 	print ("\nBOOKING COMPLETE!")
 	print ("\nTotal Amount: " + str(q[0] + q[1]))
